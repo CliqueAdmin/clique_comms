@@ -53,8 +53,8 @@ class TopQuotes with ChangeNotifier {
   // ];
 
   Future<void> fetchAndSetProducts() async {
-    var url = Uri.parse(
-        'https://api.unsplash.com/collections/stkwSZkbDBU/photos?client_id=VluRhI4bO2fdFX3ue7APFxVtzCi388L8Uszg_p1-giI');
+    var url =
+        Uri.parse('https://api.unsplash.com/collections/stkwSZkbDBU/photos');
     try {
       final response = await http.get(url);
       debugPrint(response.body);

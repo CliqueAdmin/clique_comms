@@ -1,3 +1,4 @@
+import 'package:clique_comms/widgets/help_imagepicker.dart';
 import 'package:flutter/material.dart';
 
 class OnboardHelpRequestScreen extends StatefulWidget {
@@ -55,7 +56,9 @@ class _OnboardHelpRequestScreenState extends State<OnboardHelpRequestScreen>
             child: TabBarView(
               controller: this.tabController,
               children: <Widget>[
-                Center(child: Text('Content of Home')),
+                Center(
+                  child: HelpImagePicker(),
+                ),
                 Center(child: Text('Content of Profile')),
               ],
             ),

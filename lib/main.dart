@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import 'providers/auth.dart';
 import 'screens/CommunityLandingScreen.dart';
-import 'screens/ProductsOverviewScreen.dart';
 import 'screens/edit_product_screen.dart';
 
 void main() {
@@ -42,16 +41,11 @@ class MyApp extends StatelessWidget {
         ),
         home: CommunityLandingScreen(),
         routes: {
+          CommunityLandingScreen.routeName: (ctx) => CommunityLandingScreen(),
           QuotesScreen.routeName: (ctx) => QuotesScreen(),
           EditProductScreen.routeName: (ctx) => EditProductScreen(),
           OnboardHelpRequestScreen.routeName: (ctx) =>
               OnboardHelpRequestScreen(),
-
-          // ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-          // CartScreen.routeName: (ctx) => CartScreen(),
-          // OrdersScreen.routeName: (ctx) => OrdersScreen(),
-          // UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-          // EditProductScreen.routeName: (ctx) => EditProductScreen(),
         },
       ),
     );

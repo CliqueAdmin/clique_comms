@@ -1,15 +1,40 @@
 import 'package:clique_comms/extentions/color_extention.dart';
-import 'package:clique_comms/providers/top_quote.dart';
 import 'package:clique_comms/providers/top_quotes.dart';
+import 'package:clique_comms/screens/CommunityLandingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:progressive_image/progressive_image.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
+
+import 'onboard_help_request_screen.dart';
 
 /// This is the stateless widget that the main application instantiates.
-class QuotesScreen extends StatelessWidget {
+class QuotesScreen extends StatefulWidget {
   static const routeName = '/quotes';
+
+  @override
+  _QuotesScreenState createState() => _QuotesScreenState();
+}
+
+class _QuotesScreenState extends State<QuotesScreen> {
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      if (_selectedIndex == index) {
+        return;
+      }
+      _selectedIndex = index;
+      if (_selectedIndex == 0) {
+        Navigator.of(context).pushNamed(CommunityLandingScreen.routeName);
+      }
+      if (_selectedIndex == 1) {
+        Navigator.of(context).pushNamed(QuotesScreen.routeName);
+      }
+      if (_selectedIndex == 2) {
+        Navigator.of(context).pushNamed(OnboardHelpRequestScreen.routeName);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +57,8 @@ class QuotesScreen extends StatelessWidget {
               color: bgColor,
               child: BlurHash(
                 imageFit: BoxFit.cover,
-                duration: const Duration(milliseconds: 3000),
-                curve: Curves.easeInOutBack,
+                duration: const Duration(milliseconds: 1500),
+                curve: Curves.easeInOutExpo,
                 hash: topQuotes[position].blurHash,
                 image: topQuotes[position].imageUrl,
                 onStarted: () {
@@ -51,19 +76,23 @@ class QuotesScreen extends StatelessWidget {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0, // this will be set when a new tab is tapped
-        items: [
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: new Icon(Icons.home),
-            title: new Text('Home'),
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.mail),
-            title: new Text('Messages'),
+            icon: Icon(Icons.business),
+            label: 'Business',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('Profile'))
+            icon: Icon(Icons.school),
+            label: 'School',
+          ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }

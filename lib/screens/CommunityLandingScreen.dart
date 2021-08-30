@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:clique_comms/providers/top_quotes.dart';
+import 'package:clique_comms/screens/onboard_help_request_screen.dart';
+import 'package:clique_comms/screens/quotes_screen.dart';
 import 'package:clique_comms/widgets/custom_tab.dart';
 import 'package:clique_comms/widgets/top_quote.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +11,14 @@ import 'package:provider/provider.dart';
 import '../providers/products.dart';
 
 class CommunityLandingScreen extends StatefulWidget {
+  static const routeName = '/landing';
   @override
   _CommunityLandingScreenState createState() => _CommunityLandingScreenState();
 }
 
 class _CommunityLandingScreenState extends State<CommunityLandingScreen>
     with TickerProviderStateMixin {
+  int _selectedIndex = 0;
   var _isInit = true;
   var _isLoading = false;
 
@@ -147,24 +151,46 @@ class _CommunityLandingScreenState extends State<CommunityLandingScreen>
               ),
             ),
             bottomNavigationBar: BottomNavigationBar(
-              currentIndex: 0, // this will be set when a new tab is tapped
-              items: [
+              items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: new Icon(Icons.home),
-                  title: new Text('Home'),
+                  icon: Icon(Icons.home),
+                  label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: new Icon(Icons.mail),
-                  title: new Text('Messages'),
+                  icon: Icon(Icons.business),
+                  label: 'Business',
                 ),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.person), title: Text('Profile'))
+                  icon: Icon(Icons.school),
+                  label: 'School',
+                ),
               ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.amber[800],
+              onTap: _onItemTapped,
             ),
           );
         },
       ),
     );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      if (_selectedIndex == index) {
+        return;
+      }
+      _selectedIndex = index;
+      if (_selectedIndex == 0) {
+        Navigator.of(context).pushNamed(CommunityLandingScreen.routeName);
+      }
+      if (_selectedIndex == 1) {
+        Navigator.of(context).pushNamed(QuotesScreen.routeName);
+      }
+      if (_selectedIndex == 2) {
+        Navigator.of(context).pushNamed(OnboardHelpRequestScreen.routeName);
+      }
+    });
   }
 
   @override

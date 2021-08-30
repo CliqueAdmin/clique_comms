@@ -30,6 +30,7 @@ dependencies:
   progressive_image: ^2.0.0
   transparent_image: ^2.0.0
   flutter_blurhash: ^0.6.0
+  image_picker: ^0.8.3+3
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,4 +1,7 @@
+import 'package:clique_comms/screens/CommunityLandingScreen.dart';
 import 'package:clique_comms/widgets/help_imagepicker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OnboardHelpRequestScreen extends StatefulWidget {
@@ -11,6 +14,11 @@ class OnboardHelpRequestScreen extends StatefulWidget {
 
 class _OnboardHelpRequestScreenState extends State<OnboardHelpRequestScreen>
     with SingleTickerProviderStateMixin {
+  final Stream<QuerySnapshot> users =
+      FirebaseFirestore.instance.collection('users').snapshots();
+  var name = '';
+  var age = 0;
+
   TabController tabController;
   @override
   void initState() {
@@ -23,6 +31,8 @@ class _OnboardHelpRequestScreenState extends State<OnboardHelpRequestScreen>
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    CollectionReference usersA = FirebaseFirestore.instance.collection('users');
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -32,10 +42,7 @@ class _OnboardHelpRequestScreenState extends State<OnboardHelpRequestScreen>
             expandedHeight: 250,
             flexibleSpace: FlexibleSpaceBar(
               title: Text("this.widget.title"),
-              background: Image.network(
-                'http://img1.mukewang.com/5c18cf540001ac8206000338.jpg',
-                fit: BoxFit.cover,
-              ),
+              background: Placeholder(),
             ),
           ),
           SliverPersistentHeader(
@@ -59,13 +66,112 @@ class _OnboardHelpRequestScreenState extends State<OnboardHelpRequestScreen>
                 Center(
                   child: HelpImagePicker(),
                 ),
-                Center(child: Text('Content of Profile')),
+                Center(
+                    child: Column(
+                  children: [
+                    Container(
+                      height: 250,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: users,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('error');
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text('loading');
+                          }
+                          final data = snapshot.requireData;
+                          return ListView.builder(
+                            itemCount: data.size,
+                            itemBuilder: (context, index) {
+                              return Text(
+                                  "My name is ${data.docs[index]['name']} and I am ${data.docs[index]['age']}");
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                  icon: Icon(Icons.person),
+                                  hintText: 'WHhat is your namne!',
+                                  labelText: 'Name  '),
+                              onChanged: (value) {
+                                name = value;
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'pleae add age';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                  icon: Icon(Icons.date_range),
+                                  hintText: 'WHhat is your age!',
+                                  labelText: 'Age  '),
+                              onChanged: (value) {
+                                age = int.tryParse(value);
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'pleae add age';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState.validate()) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text('Data to cloud firstore.'),
+                                      ),
+                                    );
+                                    usersA
+                                        .add({'name': name, 'age': age})
+                                        .then((value) => print(value))
+                                        .catchError((error) => print(error));
+                                  }
+                                },
+                                child: Text('Submit'),
+                              ),
+                            ),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: _signOut,
+                                child: Text('Sign Out'),
+                              ),
+                            )
+                          ],
+                        )),
+                  ],
+                )),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushNamed(CommunityLandingScreen.routeName);
   }
 
   Widget _buildListWidget(Color color, String text) {

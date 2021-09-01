@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -47,7 +49,25 @@ class _HelpImagePickerState extends State<HelpImagePicker> {
           ),
           label: Text('Add image'),
         ),
+        ElevatedButton(
+          onPressed: _storeImage,
+          child: Text('Sign Out'),
+        ),
       ],
     );
+  }
+
+  void _storeImage() async {
+    User user = FirebaseAuth.instance.currentUser;
+
+    try {
+      await FirebaseStorage.instance
+          .ref()
+          .child('user_images')
+          .child(user.uid + '.jpg')
+          .putFile(_pickedImage);
+    } on FirebaseException catch (e) {
+      // e.g, e.code == 'canceled'
+    }
   }
 }

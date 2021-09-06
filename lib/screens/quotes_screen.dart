@@ -1,10 +1,10 @@
 import 'package:clique_comms/extentions/color_extention.dart';
 import 'package:clique_comms/providers/top_quotes.dart';
-import 'package:clique_comms/screens/CommunityLandingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:provider/provider.dart';
 
+import 'community_landing_screen.dart';
 import 'onboard_help_request_screen.dart';
 
 /// This is the stateless widget that the main application instantiates.

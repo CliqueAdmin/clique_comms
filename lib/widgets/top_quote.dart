@@ -5,80 +5,65 @@ import '../providers/top_quote.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TopQuoteWidget extends StatelessWidget {
+class TopQuoteWidget extends StatefulWidget {
+  @override
+  _TopQuoteWidgetState createState() => _TopQuoteWidgetState();
+}
+
+class _TopQuoteWidgetState extends State<TopQuoteWidget> {
   @override
   Widget build(BuildContext context) {
     final topQuote = Provider.of<TopQuote>(context, listen: false);
-    return Padding(
-      padding: EdgeInsets.all(50),
-      child: Container(
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                height: 10,
-                color: Colors.amberAccent,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  QuotesScreen.routeName,
-                  arguments: topQuote.quoteId,
-                );
-              },
-              child: Card(
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        ProgressiveImage.memoryNetwork(
-                          placeholder: kTransparentImage,
-                          // size: 1.87KB
-                          thumbnail: topQuote.imageUrlThumb,
-                          // size: 1.29MB
-                          image: topQuote.imageUrlSmall,
-                          height: 300,
-                          width: 500,
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          bottom: 16,
-                          right: 16,
-                          left: 16,
-                          child: Text(topQuote.quote == null
-                              ? "No quote found"
-                              : topQuote.quote),
-                        ),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.start,
-                          children: [
-                            FlatButton(
-                              child: Text('Buy Cat'),
-                              onPressed: () {},
-                            ),
-                            FlatButton(
-                              child: Text('Buy Cat Food'),
-                              onPressed: () {},
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
+    return Column(
+      children: [
+        Card(
+          // elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: ProgressiveImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  thumbnail: topQuote.imageUrlThumb,
+                  image: topQuote.imageUrlSmall,
+                  height: 380,
+                  width: 400,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ),
-            Expanded(
-              child: Container(
-                height: 10,
-                color: Colors.amberAccent,
+              Positioned(
+                bottom: 16,
+                right: 16,
+                left: 16,
+                child: Container(
+                  color: Colors.transparent,
+                  child: ButtonBar(
+                    children: [
+                      Container(
+                        color: Colors.black26,
+                        child: IconButton(
+                          color: Theme.of(context).accentColor,
+                          iconSize: 32,
+                          icon: const Icon(Icons.fullscreen),
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              QuotesScreen.routeName,
+                              arguments: topQuote.quoteId,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

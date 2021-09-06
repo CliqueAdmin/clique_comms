@@ -7,14 +7,17 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth.dart';
-import 'screens/CommunityLandingScreen.dart';
+import 'screens/community_landing_screen.dart';
 import 'screens/edit_product_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -26,27 +29,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: Auth(),
-        ),
-        ChangeNotifierProxyProvider<Auth, Products>(
-          create: (_) => Products('', '', []),
-          update: (ctx, auth, previousProducts) => Products(
-            auth.token,
-            auth.userId,
-            previousProducts == null ? [] : previousProducts.items,
-          ),
-        ),
+        // ChangeNotifierProvider.value(
+        //   value: Auth(),
+        // ),
+        // ChangeNotifierProxyProvider<Auth, Products>(
+        //   create: (_) => Products('', '', []),
+        //   update: (ctx, auth, previousProducts) => Products(
+        //     auth.token,
+        //     auth.userId,
+        //     previousProducts == null ? [] : previousProducts.items,
+        //   ),
+        // ),
         ChangeNotifierProvider.value(
           value: TopQuotes(),
         ),
       ],
       child: MaterialApp(
-        title: 'MyShop',
+        title: 'DeedPearls',
         theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
+          // primarySwatch: colorCustom,
+          accentColor: Colors.teal,
+          fontFamily: 'Roboto',
+          primaryColor: Colors.white,
         ),
         home: CommunityLandingScreen(analytics, observer),
         routes: {

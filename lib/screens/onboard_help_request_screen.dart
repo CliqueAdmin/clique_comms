@@ -1,4 +1,4 @@
-import 'package:clique_comms/screens/CommunityLandingScreen.dart';
+import 'package:clique_comms/screens/community_landing_screen.dart';
 import 'package:clique_comms/widgets/help_imagepicker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
